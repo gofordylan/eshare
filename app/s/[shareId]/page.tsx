@@ -1,6 +1,24 @@
-import { ShareForm } from "@/components/share-form";
+"use client";
 
-export default function Home() {
+import { use } from "react";
+import { ClaimCard } from "@/components/claim-card";
+
+function LockIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <rect x="5" y="11" width="14" height="10" rx="1" />
+      <path d="M8 11V7a4 4 0 1 1 8 0v4" />
+    </svg>
+  );
+}
+
+export default function ClaimPage({
+  params,
+}: {
+  params: Promise<{ shareId: string }>;
+}) {
+  const { shareId } = use(params);
+
   return (
     <main className="h-screen overflow-hidden relative flex flex-col">
       {/* Header - Brand only */}
@@ -8,10 +26,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 animate-fade-up">
             <div className="w-8 h-8 border border-current flex items-center justify-center">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <rect x="5" y="11" width="14" height="10" rx="1" />
-                <path d="M8 11V7a4 4 0 1 1 8 0v4" />
-              </svg>
+              <LockIcon className="w-4 h-4" />
             </div>
             <span className="text-lg font-medium tracking-tight">dshare</span>
           </div>
@@ -21,12 +36,12 @@ export default function Home() {
       {/* Main Content */}
       <section className="flex-1 min-h-0 px-6 lg:px-12 pb-8 lg:pb-12">
         <div className="max-w-6xl mx-auto w-full h-full">
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-end">
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-stretch">
             {/* Left: Hero + Info */}
             <div className="lg:w-1/2 animate-fade-up-delay-1">
               {/* Hero */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl leading-[0.92] mb-4">
-                Files only they
+                Files only <span className="font-semibold">you</span>
                 <br />
                 can decrypt.
               </h1>
@@ -40,10 +55,10 @@ export default function Home() {
                 <span className="section-label mb-3 block">Security</span>
                 <div className="space-y-3">
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                    Files are encrypted in your browser using the recipient&apos;s public key derived from their address. Only their wallet can decrypt. We never see your files or keys.
+                    These files were encrypted using your public key derived from your address. Only your wallet can decrypt them.
                   </p>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                    The encryption happens entirely client-side using industry-standard cryptography. Your data is protected before it ever leaves your device.
+                    Decryption happens entirely in your browser. Your private key never leaves your wallet.
                   </p>
                 </div>
               </div>
@@ -64,17 +79,13 @@ export default function Home() {
                     <span style={{ color: 'var(--muted-foreground)' }}>Storage duration</span>
                     <span className="mono">7 days</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span style={{ color: 'var(--muted-foreground)' }}>Max file size</span>
-                    <span className="mono">100 MB</span>
-                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Right: Form */}
+            {/* Right: Claim Card */}
             <div className="lg:w-1/2 animate-fade-up-delay-2">
-              <ShareForm />
+              <ClaimCard shareId={shareId} />
             </div>
           </div>
         </div>

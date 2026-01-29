@@ -1,26 +1,324 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+/* ============================================
+   NEO-SWISS MINIMAL
+   Precise, confident, geometric
+   ============================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-hover: #262626;
+  --primary-foreground: #fafafa;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #0a0a0a;
+  --accent-foreground: #fafafa;
+  --destructive: #dc2626;
+  --border: #e4e4e7;
+  --input: #f4f4f5;
+  --ring: #0a0a0a;
+  --radius: 0;
+
+  --card-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.02), 0 12px 24px rgba(0,0,0,0.03);
+  --card-border: 1px solid #e4e4e7;
+  --dropzone-bg: #fafafa;
+  --dropzone-border: 1px dashed #d4d4d8;
+  --dropzone-hover-border: #0a0a0a;
+  --progress-bg: #e4e4e7;
+  --progress-fill: #0a0a0a;
+  --file-item-bg: #f4f4f5;
+  --file-item-border: 1px solid #e4e4e7;
+  --corner-accent-color: #0a0a0a;
+
+  --font-display: var(--font-serif), 'Times New Roman', serif;
+  --font-body: var(--font-sans), system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', monospace;
 }
 
+/* ============================================
+   BASE STYLES
+   ============================================ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 2px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    min-height: 100vh;
+    font-family: var(--font-body);
+    font-feature-settings: 'ss01' on, 'ss02' on;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Card - Sharp edges, subtle depth */
+  .vault-card {
+    background: var(--card);
+    border: var(--card-border);
+    box-shadow: var(--card-shadow);
+  }
+
+  /* Geometric accent line */
+  .gold-accent {
+    background: var(--primary);
+    height: 1px;
+  }
+
+  /* Corner brackets - precision detail */
+  .corner-accent {
+    @apply absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--corner-accent-color);
+  }
+  .corner-accent-tl { @apply top-0 left-0 border-t border-l; }
+  .corner-accent-tr { @apply top-0 right-0 border-t border-r; }
+  .corner-accent-bl { @apply bottom-0 left-0 border-b border-l; }
+  .corner-accent-br { @apply bottom-0 right-0 border-b border-r; }
+
+  /* Staggered reveal animations */
+  .animate-fade-up {
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+  .animate-fade-up-delay-1 {
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    opacity: 0;
+  }
+  .animate-fade-up-delay-2 {
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    opacity: 0;
+  }
+  .animate-fade-up-delay-3 {
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    opacity: 0;
+  }
+  .animate-fade-up-delay-4 {
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slide in from left for info panel */
+  .animate-slide-in-left {
+    animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+    opacity: 0;
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-32px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Slide in from right for form */
+  .animate-slide-in-right {
+    animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+    opacity: 0;
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(32px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Dropzone - Clean, geometric */
+  .dropzone-vault {
+    @apply relative;
+    background: var(--dropzone-bg);
+    border: var(--dropzone-border);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .dropzone-vault:hover {
+    border-color: var(--muted-foreground);
+    background: var(--card);
+  }
+  .dropzone-vault.dragging {
+    border-color: var(--primary);
+    border-style: solid;
+    background: var(--card);
+  }
+
+  /* Progress bar - Sharp */
+  .progress-vault {
+    @apply h-0.5 overflow-hidden;
+    background: var(--progress-bg);
+  }
+  .progress-vault-fill {
+    @apply h-full;
+    background: var(--progress-fill);
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* File items */
+  .file-item {
+    @apply flex items-center justify-between px-3 py-2.5;
+    background: var(--file-item-bg);
+    border: var(--file-item-border);
+    transition: all 0.15s ease;
+  }
+  .file-item:hover {
+    background: var(--card);
+    border-color: var(--muted-foreground);
+  }
+
+  /* Input styling */
+  .input-vault {
+    background: var(--card);
+    border: 1px solid var(--border);
+    transition: all 0.15s ease;
+  }
+  .input-vault:focus {
+    border-color: var(--primary);
+    outline: none;
+  }
+
+  /* Button - Confident, geometric */
+  .btn-vault {
+    @apply relative overflow-hidden;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-vault:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .btn-vault:active {
+    transform: translateY(0);
+  }
+
+  /* Success animation */
+  .success-check {
+    animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes checkPop {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Step number styling */
+  .step-number {
+    @apply flex items-center justify-center text-xs font-medium;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border);
+    font-family: var(--font-mono);
+  }
+
+  /* Monospace accents */
+  .mono {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    letter-spacing: -0.02em;
+  }
+
+  /* Label styling */
+  .section-label {
+    @apply text-[10px] font-medium uppercase tracking-[0.2em];
+    color: var(--muted-foreground);
+  }
+
+  /* Divider with label */
+  .divider-label {
+    @apply flex items-center gap-4;
+  }
+  .divider-label::before,
+  .divider-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+}
+
+/* Scrollbar - Minimal */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Focus states */
+:focus-visible {
+  outline: 1px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Hide focus for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
 }
