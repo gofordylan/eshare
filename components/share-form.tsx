@@ -126,7 +126,7 @@ export function ShareForm() {
   };
 
   return (
-    <div className="vault-card p-6 lg:p-8 relative h-full flex flex-col">
+    <div className="vault-card p-6 lg:p-8 relative h-full flex flex-col min-h-[420px]">
       {/* Corner Accents */}
       <div className="corner-accent corner-accent-tl" />
       <div className="corner-accent corner-accent-tr" />
@@ -134,7 +134,7 @@ export function ShareForm() {
       <div className="corner-accent corner-accent-br" />
 
       {!isConnected ? (
-        <div className="py-10">
+        <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 mx-auto mb-4 border flex items-center justify-center" style={{ borderColor: 'var(--border)' }}>
               <LockIcon className="w-6 h-6" />
@@ -149,7 +149,7 @@ export function ShareForm() {
           </div>
         </div>
       ) : shareLink ? (
-        <div className="py-4">
+        <div className="flex-1 flex flex-col justify-center">
           <div className="text-center mb-6">
             <div className="success-check w-12 h-12 mx-auto mb-4 border flex items-center justify-center" style={{ borderColor: 'var(--primary)' }}>
               <CheckIcon className="w-6 h-6" />
@@ -190,7 +190,7 @@ export function ShareForm() {
           </div>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="flex-1 flex flex-col space-y-3">
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: 'var(--border)' }}>
             <h2 className="text-2xl">Send</h2>
