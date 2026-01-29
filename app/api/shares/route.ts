@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       fileManifest,
     });
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").trim();
     const shareLink = `${appUrl}/s/${shareId}`;
 
     return NextResponse.json({
