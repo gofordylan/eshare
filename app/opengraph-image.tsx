@@ -28,8 +28,9 @@ export default async function Image() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            width: "45%",
+            width: "50%",
             height: "100%",
+            paddingRight: "40px",
           }}
         >
           {/* Logo + Brand */}
@@ -76,20 +77,20 @@ export default async function Image() {
               gap: "16px",
             }}
           >
-            <h1
+            <div
               style={{
-                fontSize: "64px",
+                display: "flex",
+                flexDirection: "column",
+                fontSize: "56px",
                 fontWeight: 400,
                 color: "#0a0a0a",
                 letterSpacing: "-0.04em",
-                lineHeight: 0.95,
-                margin: 0,
+                lineHeight: 1.05,
               }}
             >
-              Files only they
-              <br />
-              can decrypt.
-            </h1>
+              <span>Files only they</span>
+              <span>can decrypt.</span>
+            </div>
             <p
               style={{
                 fontSize: "20px",
@@ -109,9 +110,8 @@ export default async function Image() {
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
-            width: "55%",
+            width: "50%",
             height: "100%",
-            paddingLeft: "40px",
           }}
         >
           <div
