@@ -27,7 +27,8 @@ export default async function Image() {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "center",
+            gap: "32px",
             width: "50%",
             height: "100%",
             paddingRight: "40px",
