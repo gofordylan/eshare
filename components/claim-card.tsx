@@ -264,9 +264,14 @@ export function ClaimCard({ shareId }: ClaimCardProps) {
         </div>
       </div>
 
-      {/* From info - fixed */}
-      <div className="text-sm mb-4 shrink-0" style={{ color: 'var(--muted-foreground)' }}>
-        From <span className="mono" style={{ color: 'var(--foreground)' }}>{shareInfo?.senderEns || resolvedSenderEns || formatAddress(shareInfo?.senderAddress || "")}</span>
+      {/* To/From info - fixed */}
+      <div className="text-sm mb-4 shrink-0 space-y-1">
+        <div style={{ color: 'var(--muted-foreground)' }}>
+          To <span className="mono" style={{ color: 'var(--foreground)' }}>{shareInfo?.recipientEns || formatAddress(shareInfo?.recipientAddress || "")}</span>
+        </div>
+        <div style={{ color: 'var(--muted-foreground)' }}>
+          From <span className="mono" style={{ color: 'var(--foreground)' }}>{shareInfo?.senderEns || resolvedSenderEns || formatAddress(shareInfo?.senderAddress || "")}</span>
+        </div>
       </div>
 
       {/* Content area - fills available space */}
