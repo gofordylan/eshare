@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "dshare - Private Vault for Your Files",
+  title: "eshare - Private Vault for Your Files",
   description: "End-to-end encrypted file sharing via ENS. Your files, your keys, your control.",
 };
 

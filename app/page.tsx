@@ -13,7 +13,7 @@ export default function Home() {
                 <path d="M8 11V7a4 4 0 1 1 8 0v4" />
               </svg>
             </div>
-            <span className="text-lg font-medium tracking-tight">dshare</span>
+            <span className="text-lg font-medium tracking-tight">eshare</span>
           </div>
         </div>
       </header>

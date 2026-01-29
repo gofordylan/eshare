@@ -28,7 +28,7 @@ export default function ClaimPage({
             <div className="w-8 h-8 border border-current flex items-center justify-center">
               <LockIcon className="w-4 h-4" />
             </div>
-            <span className="text-lg font-medium tracking-tight">dshare</span>
+            <span className="text-lg font-medium tracking-tight">eshare</span>
           </div>
         </div>
       </header>
