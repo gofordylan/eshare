@@ -63,13 +63,27 @@ export async function POST(
     // Mark as claimed
     await markShareClaimed(shareId);
 
-    // Return decryption key and blob URL
-    return NextResponse.json({
-      blobUrl: share.blob_url,
-      encryptedKey: share.encrypted_key,
-      iv: share.iv,
-      fileManifest: share.file_manifest,
-    });
+    // Return data based on encryption mode
+    if (share.encryption_mode === "ecies") {
+      // E2E mode: return ephemeral public key for ECDH
+      // Client will derive decryption key locally
+      return NextResponse.json({
+        blobUrl: share.blob_url,
+        ephemeralPublicKey: share.ephemeral_public_key,
+        iv: share.iv,
+        fileManifest: share.file_manifest,
+        encryptionMode: "ecies",
+      });
+    } else {
+      // Legacy mode: return encryption key directly
+      return NextResponse.json({
+        blobUrl: share.blob_url,
+        encryptedKey: share.encrypted_key,
+        iv: share.iv,
+        fileManifest: share.file_manifest,
+        encryptionMode: "legacy",
+      });
+    }
   } catch (error) {
     console.error("Claim share error:", error);
     return NextResponse.json(

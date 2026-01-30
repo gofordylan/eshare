@@ -156,6 +156,13 @@ export function generateClaimMessage(shareId: string, walletAddress: string): st
   return `I am claiming share ${shareId} with wallet ${walletAddress.toLowerCase()}`;
 }
 
+// Generate deterministic message for E2E encryption key derivation
+// This message is the same for all shares to/from this address, allowing
+// the derived public key to be known ahead of time by senders.
+export function generateDerivedKeyMessage(walletAddress: string): string {
+  return `eshare encryption key v1 for ${walletAddress.toLowerCase()}`;
+}
+
 // Utility: ArrayBuffer to base64
 export function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);

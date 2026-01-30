@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createShare } from "@/lib/db";
+import { createShare, EncryptionMode } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(request: NextRequest) {
@@ -13,7 +13,11 @@ export async function POST(request: NextRequest) {
       recipientEns,
       blobUrl,
       blobSizeBytes,
+      // Legacy mode fields
       encryptedKey,
+      // E2E mode fields
+      ephemeralPublicKey,
+      encryptionMode = "legacy" as EncryptionMode,
       iv,
       fileManifest,
     } = body;
@@ -26,11 +30,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!encryptedKey || !iv || !fileManifest) {
+    if (!iv || !fileManifest) {
       return NextResponse.json(
         { error: "Missing encryption data" },
         { status: 400 }
       );
+    }
+
+    // Validate mode-specific fields
+    if (encryptionMode === "ecies") {
+      if (!ephemeralPublicKey) {
+        return NextResponse.json(
+          { error: "Missing ephemeralPublicKey for E2E encryption" },
+          { status: 400 }
+        );
+      }
+    } else {
+      if (!encryptedKey) {
+        return NextResponse.json(
+          { error: "Missing encryptedKey for legacy encryption" },
+          { status: 400 }
+        );
+      }
     }
 
     // Validate addresses
@@ -51,7 +72,9 @@ export async function POST(request: NextRequest) {
       recipientEns,
       blobUrl,
       blobSizeBytes,
-      encryptedKey,
+      encryptedKey: encryptionMode === "legacy" ? encryptedKey : undefined,
+      ephemeralPublicKey: encryptionMode === "ecies" ? ephemeralPublicKey : undefined,
+      encryptionMode,
       iv,
       fileManifest,
     });
@@ -62,6 +85,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       shareId,
       shareLink,
+      encryptionMode,
     });
   } catch (error) {
     console.error("Create share error:", error);

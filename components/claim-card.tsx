@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useAccount, useSignMessage, useEnsName } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useClaimShare } from "@/hooks/use-claim-share";
-import { generateClaimMessage, FileManifest } from "@/lib/crypto";
+import { generateClaimMessage, generateDerivedKeyMessage, FileManifest } from "@/lib/crypto";
+import { deriveKeyPair } from "@/lib/derived-keys";
 
 interface ShareInfo {
   id: string;
@@ -145,15 +146,35 @@ export function ClaimCard({ shareId }: ClaimCardProps) {
     setError(null);
 
     try {
-      const message = generateClaimMessage(shareId, address);
-      const signature = await signMessageAsync({ message });
+      // Sign the claim message (for authentication)
+      const claimMessage = generateClaimMessage(shareId, address);
+      const claimSignature = await signMessageAsync({ message: claimMessage });
+
+      // Sign the derivation message (for E2E key derivation)
+      // This signature is consistent across all shares, allowing key reuse
+      const derivationMessage = generateDerivedKeyMessage(address);
+      const derivationSignature = await signMessageAsync({ message: derivationMessage });
+
+      // Derive and store the public key for future E2E encryption
+      const { publicKey: derivedPublicKey } = deriveKeyPair(derivationSignature);
+      try {
+        await fetch(`/api/pubkey/${address}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ publicKey: derivedPublicKey }),
+        });
+      } catch {
+        // Non-critical: public key storage failed, but we can still decrypt
+        console.warn("Failed to store derived public key");
+      }
 
       setStatus("claiming");
       setProgress(20);
 
       const files = await claimAndDecrypt({
         shareId,
-        signature,
+        signature: claimSignature,
+        derivationSignature,
         walletAddress: address,
         onProgress: (stage, pct) => {
           if (stage === "claiming") {
