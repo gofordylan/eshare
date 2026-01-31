@@ -20,7 +20,7 @@ export default function ClaimPage({
   const { shareId } = use(params);
 
   return (
-    <main className="h-screen overflow-hidden relative flex flex-col">
+    <main className="min-h-screen lg:h-screen lg:overflow-hidden overflow-auto relative flex flex-col">
       {/* Header - Brand only */}
       <header className="shrink-0 px-6 lg:px-12 pt-6 lg:pt-8 pb-6 lg:pb-8">
         <div className="max-w-6xl mx-auto">
@@ -36,7 +36,7 @@ export default function ClaimPage({
       {/* Main Content */}
       <section className="flex-1 min-h-0 px-6 lg:px-12 pb-8 lg:pb-12">
         <div className="max-w-6xl mx-auto w-full h-full">
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-stretch">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-16 lg:items-stretch">
             {/* Left: Hero + Info */}
             <div className="lg:w-1/2 animate-fade-up-delay-1">
               {/* Hero */}
@@ -50,8 +50,8 @@ export default function ClaimPage({
                 End-to-end encrypted file sharing via ENS.
               </p>
 
-              {/* Security section */}
-              <div className="mb-4">
+              {/* Security section - hidden on mobile */}
+              <div className="mb-4 hidden lg:block">
                 <span className="section-label mb-3 block">Security</span>
                 <div className="space-y-3">
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
@@ -63,8 +63,8 @@ export default function ClaimPage({
                 </div>
               </div>
 
-              {/* Technical specs */}
-              <div className="p-4 border" style={{ borderColor: 'var(--border)' }}>
+              {/* Technical specs - hidden on mobile */}
+              <div className="p-4 border hidden lg:block" style={{ borderColor: 'var(--border)' }}>
                 <span className="section-label mb-3 block">Technical Details</span>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
