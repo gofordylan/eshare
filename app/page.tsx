@@ -40,9 +40,12 @@ export default function Home() {
               {/* Security section */}
               <div className="mb-4">
                 <span className="section-label mb-3 block">How it works</span>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                  Your files are encrypted in your browser with a random AES-256 key. That key is then wrapped using the recipient&apos;s public key (derived from their wallet). The encrypted blob is stored and automatically deleted after 7 days. Only the recipient&apos;s wallet can unwrap the key and then decrypt the files.
-                </p>
+                <ol className="text-sm leading-relaxed space-y-1.5 list-decimal list-inside pl-4" style={{ color: 'var(--muted-foreground)' }}>
+                  <li>Your files are encrypted in your browser with a random AES-256 key.</li>
+                  <li>That key is wrapped using the recipient&apos;s public key derived from their wallet.</li>
+                  <li>The encrypted blob is stored and automatically deleted after 7 days.</li>
+                  <li>The recipient can unwrap the key and decrypt the files.</li>
+                </ol>
               </div>
 
               {/* Technical specs */}
