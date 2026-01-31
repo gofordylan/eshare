@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount, useEnsName } from "wagmi";
+import { useAccount, useEnsName, useEnsAvatar } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FileDropzone } from "@/components/file-dropzone";
 import { EnsInput } from "@/components/ens-input";
@@ -46,6 +46,7 @@ function ArrowIcon({ className }: { className?: string }) {
 export function ShareForm() {
   const { address, isConnected } = useAccount();
   const { data: senderEns } = useEnsName({ address });
+  const { data: senderAvatar } = useEnsAvatar({ name: senderEns || undefined });
   const [files, setFiles] = useState<File[]>([]);
   const [recipient, setRecipient] = useState("");
   const [resolvedAddress, setResolvedAddress] = useState<string | null>(null);
@@ -91,7 +92,15 @@ export function ShareForm() {
       setShareLink(result.shareLink);
     } catch (e) {
       setStatus("error");
-      setError(e instanceof Error ? e.message : "Something went wrong");
+      let message = "Something went wrong";
+      if (e instanceof Error) {
+        if (e.message.includes("rejected") || e.message.includes("denied")) {
+          message = "User rejected the request";
+        } else {
+          message = e.message;
+        }
+      }
+      setError(message);
     }
   };
 
@@ -199,11 +208,51 @@ export function ShareForm() {
             </div>
           </div>
 
-          <FileDropzone
-            files={files}
-            onFilesChange={setFiles}
-            disabled={isProcessing}
-          />
+          {/* From field - read only */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">From</label>
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                {senderAvatar ? (
+                  <img
+                    src={senderAvatar}
+                    alt=""
+                    className="w-5 h-5 rounded-full object-cover"
+                  />
+                ) : (
+                  <svg className="w-5 h-5" style={{ color: 'var(--muted-foreground)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 21C4 17.134 7.58172 14 12 14C16.4183 14 20 17.134 20 21" strokeLinecap="round" />
+                  </svg>
+                )}
+              </div>
+              <div
+                className="input-vault w-full pl-10 pr-3 py-3 rounded-lg text-sm flex items-center"
+                style={{
+                  background: 'var(--file-item-bg)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--muted-foreground)',
+                  cursor: 'not-allowed'
+                }}
+              >
+                <span className="truncate">
+                  {senderEns || `${address?.slice(0, 6)}...${address?.slice(-4)}`}
+                </span>
+              </div>
+            </div>
+            <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
+              Connected wallet
+            </p>
+          </div>
+
+          <div className="flex-1 min-h-0">
+            <FileDropzone
+              files={files}
+              onFilesChange={setFiles}
+              disabled={isProcessing}
+              className="h-full"
+            />
+          </div>
 
           <EnsInput
             value={recipient}

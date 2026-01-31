@@ -16,17 +16,17 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "eshare - Files only they can decrypt",
+  title: "eshare - Send files no one else can read",
   description: "End-to-end encrypted file sharing via ENS. Your files, your keys, your control.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://eshare.dylanbrodeur.org"),
   openGraph: {
-    title: "eshare - Files only they can decrypt",
+    title: "eshare - Send files no one else can read",
     description: "End-to-end encrypted file sharing via ENS",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "eshare - Files only they can decrypt",
+    title: "eshare - Send files no one else can read",
     description: "End-to-end encrypted file sharing via ENS",
   },
 };

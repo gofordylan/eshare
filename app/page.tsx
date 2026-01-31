@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { ShareForm } from "@/components/share-form";
+import { SetupE2ECard } from "@/components/setup-e2e-card";
 
 export default function Home() {
   return (
@@ -6,7 +8,7 @@ export default function Home() {
       {/* Header - Brand only */}
       <header className="shrink-0 px-6 lg:px-12 pt-6 lg:pt-8 pb-6 lg:pb-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 animate-fade-up">
+          <Link href="/" className="flex items-center gap-3 animate-fade-up hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 border border-current flex items-center justify-center">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <rect x="5" y="11" width="14" height="10" rx="1" />
@@ -14,21 +16,21 @@ export default function Home() {
               </svg>
             </div>
             <span className="text-lg font-medium tracking-tight">eshare</span>
-          </div>
+          </Link>
         </div>
       </header>
 
       {/* Main Content */}
       <section className="flex-1 min-h-0 px-6 lg:px-12 pb-8 lg:pb-12">
         <div className="max-w-6xl mx-auto w-full h-full">
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-end">
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-stretch">
             {/* Left: Hero + Info */}
             <div className="lg:w-1/2 animate-fade-up-delay-1">
               {/* Hero */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl leading-[0.92] mb-4">
-                Files only they
+                Send files no one
                 <br />
-                can decrypt.
+                else can read.
               </h1>
 
               <p className="text-lg lg:text-xl mb-6" style={{ color: 'var(--muted-foreground)' }}>
@@ -37,19 +39,14 @@ export default function Home() {
 
               {/* Security section */}
               <div className="mb-4">
-                <span className="section-label mb-3 block">Security</span>
-                <div className="space-y-3">
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                    Files are encrypted in your browser using the recipient&apos;s public key derived from their address. Only their wallet can decrypt. We never see your files or keys.
-                  </p>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
-                    The encryption happens entirely client-side using industry-standard cryptography. Your data is protected before it ever leaves your device.
-                  </p>
-                </div>
+                <span className="section-label mb-3 block">How it works</span>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
+                  Your files are encrypted in your browser with a random AES-256 key. That key is then wrapped using the recipient&apos;s public key (derived from their wallet). The encrypted blob is stored and automatically deleted after 7 days. Only the recipient&apos;s wallet can unwrap the key and then decrypt the files.
+                </p>
               </div>
 
               {/* Technical specs */}
-              <div className="p-4 border" style={{ borderColor: 'var(--border)' }}>
+              <div className="p-4 border mb-4" style={{ borderColor: 'var(--border)' }}>
                 <span className="section-label mb-3 block">Technical Details</span>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
@@ -70,6 +67,9 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+
+              {/* E2E Setup Card */}
+              <SetupE2ECard />
             </div>
 
             {/* Right: Form */}

@@ -1,7 +1,9 @@
 "use client";
 
 import { use } from "react";
+import Link from "next/link";
 import { ClaimCard } from "@/components/claim-card";
+import { SetupE2ECard } from "@/components/setup-e2e-card";
 
 function LockIcon({ className }: { className?: string }) {
   return (
@@ -24,12 +26,12 @@ export default function ClaimPage({
       {/* Header - Brand only */}
       <header className="shrink-0 px-6 lg:px-12 pt-6 lg:pt-8 pb-6 lg:pb-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 animate-fade-up">
+          <Link href="/" className="flex items-center gap-3 animate-fade-up hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 border border-current flex items-center justify-center">
               <LockIcon className="w-4 h-4" />
             </div>
             <span className="text-lg font-medium tracking-tight">eshare</span>
-          </div>
+          </Link>
         </div>
       </header>
 
@@ -64,7 +66,7 @@ export default function ClaimPage({
               </div>
 
               {/* Technical specs */}
-              <div className="p-4 border" style={{ borderColor: 'var(--border)' }}>
+              <div className="p-4 border mb-4" style={{ borderColor: 'var(--border)' }}>
                 <span className="section-label mb-3 block">Technical Details</span>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
@@ -81,6 +83,9 @@ export default function ClaimPage({
                   </div>
                 </div>
               </div>
+
+              {/* E2E Setup Card */}
+              <SetupE2ECard />
             </div>
 
             {/* Right: Claim Card */}

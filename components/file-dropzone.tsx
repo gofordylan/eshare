@@ -7,6 +7,7 @@ interface FileDropzoneProps {
   files: File[];
   onFilesChange: (files: File[]) => void;
   disabled?: boolean;
+  className?: string;
 }
 
 function UploadIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
@@ -35,7 +36,7 @@ function CloseIcon({ className }: { className?: string }) {
   );
 }
 
-export function FileDropzone({ files, onFilesChange, disabled }: FileDropzoneProps) {
+export function FileDropzone({ files, onFilesChange, disabled, className }: FileDropzoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
@@ -103,8 +104,8 @@ export function FileDropzone({ files, onFilesChange, disabled }: FileDropzonePro
   const totalSize = files.reduce((acc, file) => acc + file.size, 0);
 
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-medium">
+    <div className={cn("flex flex-col", className)}>
+      <label className="block text-sm font-medium mb-2">
         Files
       </label>
 
@@ -114,7 +115,7 @@ export function FileDropzone({ files, onFilesChange, disabled }: FileDropzonePro
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={cn(
-          "dropzone-vault relative p-6 cursor-pointer",
+          "dropzone-vault relative p-6 cursor-pointer flex-1 flex flex-col",
           isDragging && "dragging",
           disabled && "opacity-50 cursor-not-allowed"
         )}
@@ -126,7 +127,7 @@ export function FileDropzone({ files, onFilesChange, disabled }: FileDropzonePro
           disabled={disabled}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        <div className="flex flex-col items-center justify-center text-center">
+        <div className="flex-1 flex flex-col items-center justify-center text-center">
           <div
             className="w-10 h-10 mb-3 border flex items-center justify-center transition-all duration-200"
             style={{
@@ -149,7 +150,7 @@ export function FileDropzone({ files, onFilesChange, disabled }: FileDropzonePro
       </div>
 
       {/* Fixed height file display area */}
-      <div className="h-4" ref={listRef}>
+      <div className="h-4 mt-2" ref={listRef}>
         {files.length > 0 && (
           <div className="relative">
             {/* Collapsed: show file info */}

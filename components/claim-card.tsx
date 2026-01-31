@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useAccount, useSignMessage, useEnsName } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useClaimShare } from "@/hooks/use-claim-share";
+import { useRegisterPubkey } from "@/hooks/use-register-pubkey";
+import { useOwnE2EStatus } from "@/hooks/use-own-e2e-status";
 import { generateClaimMessage, generateDerivedKeyMessage, FileManifest } from "@/lib/crypto";
 import { deriveKeyPair } from "@/lib/derived-keys";
 
@@ -14,6 +16,7 @@ interface ShareInfo {
   recipientAddress: string;
   recipientEns: string;
   fileManifest: FileManifest;
+  encryptionMode: "ecies" | "legacy";
   createdAt: string;
   expiresAt: string;
   claimed: boolean;
@@ -104,6 +107,8 @@ export function ClaimCard({ shareId }: ClaimCardProps) {
   const [downloadedFiles, setDownloadedFiles] = useState<File[]>([]);
 
   const { claimAndDecrypt } = useClaimShare();
+  const { registerPubkey } = useRegisterPubkey();
+  const { isRegistered: isE2ERegistered, refresh: refreshE2EStatus } = useOwnE2EStatus();
 
   useEffect(() => {
     async function fetchShareInfo() {
@@ -150,22 +155,22 @@ export function ClaimCard({ shareId }: ClaimCardProps) {
       const claimMessage = generateClaimMessage(shareId, address);
       const claimSignature = await signMessageAsync({ message: claimMessage });
 
-      // Sign the derivation message (for E2E key derivation)
-      // This signature is consistent across all shares, allowing key reuse
+      // Sign the derivation message (for decryption key derivation)
       const derivationMessage = generateDerivedKeyMessage(address);
       const derivationSignature = await signMessageAsync({ message: derivationMessage });
 
-      // Derive and store the public key for future E2E encryption
-      const { publicKey: derivedPublicKey } = deriveKeyPair(derivationSignature);
-      try {
-        await fetch(`/api/pubkey/${address}`, {
+      // If not already registered, store the public key (non-blocking)
+      if (!isE2ERegistered) {
+        const { publicKey } = deriveKeyPair(derivationSignature);
+        fetch(`/api/pubkey/${address}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ publicKey: derivedPublicKey }),
+          body: JSON.stringify({ publicKey }),
+        }).then(() => {
+          refreshE2EStatus();
+        }).catch(() => {
+          console.warn("Failed to store derived public key");
         });
-      } catch {
-        // Non-critical: public key storage failed, but we can still decrypt
-        console.warn("Failed to store derived public key");
       }
 
       setStatus("claiming");
@@ -193,7 +198,15 @@ export function ClaimCard({ shareId }: ClaimCardProps) {
       setProgress(100);
     } catch (e) {
       setStatus("error");
-      setError(e instanceof Error ? e.message : "Failed to claim files");
+      let message = "Failed to claim files";
+      if (e instanceof Error) {
+        if (e.message.includes("rejected") || e.message.includes("denied")) {
+          message = "User rejected the request";
+        } else {
+          message = e.message;
+        }
+      }
+      setError(message);
     }
   };
 
@@ -410,6 +423,19 @@ export function ClaimCard({ shareId }: ClaimCardProps) {
                 </p>
               </div>
             </div>
+
+            {/* Signature info */}
+            {!isProcessing && (
+              <div className="mt-3 p-3 border" style={{ borderColor: 'var(--border)', background: 'var(--file-item-bg)' }}>
+                <p className="text-xs font-medium mb-2" style={{ color: 'var(--muted-foreground)' }}>
+                  2 wallet signatures required:
+                </p>
+                <ol className="text-xs space-y-1 list-decimal list-inside" style={{ color: 'var(--muted-foreground)' }}>
+                  <li>Verify your identity</li>
+                  <li>Derive your decryption key</li>
+                </ol>
+              </div>
+            )}
 
             {/* Spacer to push button to bottom */}
             <div className="flex-1" />

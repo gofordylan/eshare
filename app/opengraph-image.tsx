@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "eshare - Files only they can decrypt";
+export const alt = "eshare - Send files no one else can read";
 export const size = {
   width: 1200,
   height: 630,
@@ -89,8 +89,8 @@ export default async function Image() {
                 lineHeight: 1.05,
               }}
             >
-              <span>Files only they</span>
-              <span>can decrypt.</span>
+              <span>Send files no one</span>
+              <span>else can read.</span>
             </div>
             <p
               style={{

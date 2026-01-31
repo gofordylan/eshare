@@ -24,6 +24,7 @@ export async function GET(
       recipientAddress: share.recipient_address,
       recipientEns: share.recipient_ens,
       fileManifest: share.file_manifest,
+      encryptionMode: share.encryption_mode,
       createdAt: share.created_at,
       expiresAt: share.expires_at,
       claimed: !!share.claimed_at,
